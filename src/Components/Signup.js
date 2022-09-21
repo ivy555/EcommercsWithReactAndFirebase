@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { auth, db } from '../Config/Config'
 import { Link } from 'react-router-dom'
 
+
 export const Signup = (props) => {
 
     // defining state
@@ -17,7 +18,8 @@ export const Signup = (props) => {
             db.collection('SignedUpUsersData').doc(cred.user.uid).set({
                 Name: name,
                 Email: email,
-                Password: password
+                Password: password,
+                reset_password: reset_password,
             }).then(() => {
                 setName('');
                 setEmail('');

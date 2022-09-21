@@ -4,6 +4,7 @@ import { storage, db } from '../Config/Config'
 export const AddProducts = () => {
 
     const [productName, setProductName] = useState('');
+    const[productDescription, setProductDescription] = useState('');
     const [productPrice, setProductPrice] = useState(0);
     const [productImg, setProductImg] = useState(null);
     const [error, setError] = useState('');
@@ -25,6 +26,7 @@ export const AddProducts = () => {
     // add product
     const addProduct = (e) => {
         e.preventDefault();
+        // console.log(productName, productPrice, productImg);
         const uploadTask = storage.ref(`product-images/${productImg.name}`).put(productImg);
         uploadTask.on('state_changed', snapshot => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -34,10 +36,13 @@ export const AddProducts = () => {
                 storage.ref('product-images').child(productImg.name).getDownloadURL().then(url => {
                     db.collection('Products').add({
                         ProductName: productName,
+                        ProductDescription: productDescription,
                         ProductPrice: Number(productPrice),
+
                         ProductImg: url
                     }).then(() => {
                         setProductName('');
+                        setProductDescription('');
                         setProductPrice(0)
                         setProductImg('');
                         setError('');
@@ -56,6 +61,10 @@ export const AddProducts = () => {
                 <label htmlFor="product-name">Product Name</label>
                 <input type="text" className='form-control' required
                     onChange={(e) => setProductName(e.target.value)} value={productName} />
+                <br />
+                <label htmlFor="product-description">Product Description</label>
+                <input type="text" className='form-control' required
+                    onChange={(e) => setProductDescription(e.target.value)} value={productDescription} />
                 <br />
                 <label htmlFor="product-price">Product Price</label>
                 <input type="number" className='form-control' required
